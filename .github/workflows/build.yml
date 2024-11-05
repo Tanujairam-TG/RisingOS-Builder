@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       BRAND:
-        description: 'Put your device manufacturer name please.'
+        description: 'Device manufacturer name'
         required: true
       CODENAME:
-        description: 'Put your device codename please.'
+        description: 'Device codename'
         required: true
       SIGNING:
-        description: 'The build signing. Set to "normal" by default.'
+        description: 'Build signing type'
         required: true
         default: 'normal'
         type: choice
@@ -19,7 +19,7 @@ on:
           - 'normal'
           - 'normal-fastboot'
       TYPE:
-        description: 'The build type. Set to "userdebug" by default.'
+        description: 'Build type'
         required: true
         default: 'userdebug'
         type: choice
@@ -28,7 +28,7 @@ on:
           - 'user'
           - 'userdebug'
       RELEASE:
-        description: 'The build target. Set to "stable" by default.'
+        description: 'Build target'
         required: true
         default: 'stable'
         type: choice
@@ -36,7 +36,7 @@ on:
           - 'test'
           - 'stable'
       VARIANT:
-        description: 'If you wanna build other variants like vanilla, core or gapps.'
+        description: 'Variant type'
         required: false
         default: 'CORE'
         type: choice
@@ -127,7 +127,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add $COUNTER_FILE
-          git commit -m "Update workflow run count for device ${{ inputs.CODENAME }}"
+          git commit -m "Update workflow run count for device ${{ inputs.CODENAME }} - $CURRENT_DATE"
           git push
         if: steps.check_limit.outcome == 'success'
 
@@ -182,6 +182,10 @@ jobs:
 
       - name: Upload Build Files
         run: bash upload.sh
+
+      - name: Notify Completion
+        if: always()
+        run: echo "Build completed for device: ${{ inputs.CODENAME }}"
 
       - name: Post-Cleanup
         if: ${{ always() }}
