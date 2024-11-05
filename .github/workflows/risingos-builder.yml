@@ -183,10 +183,6 @@ jobs:
       - name: Upload Build Files
         run: bash upload.sh
 
-      - name: Notify Completion
-        if: always()
-        run: echo "Build completed for device: ${{ inputs.CODENAME }}"
-
       - name: Post-Cleanup
-        if: always()
+        if: ${{ always() }}
         run: bash clean.sh
