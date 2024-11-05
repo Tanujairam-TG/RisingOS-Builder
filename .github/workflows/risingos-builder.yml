@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       BRAND:
-        description: 'Device manufacturer name'
+        description: 'Put your device manufacturer name please.'
         required: true
       CODENAME:
-        description: 'Device codename'
+        description: 'Put your device codename please.'
         required: true
       SIGNING:
-        description: 'Build signing type'
+        description: 'The build signing. Set to "normal" by default.'
         required: true
         default: 'normal'
         type: choice
@@ -19,7 +19,7 @@ on:
           - 'normal'
           - 'normal-fastboot'
       TYPE:
-        description: 'Build type'
+        description: 'The build type. Set to "userdebug" by default.'
         required: true
         default: 'userdebug'
         type: choice
@@ -28,7 +28,7 @@ on:
           - 'user'
           - 'userdebug'
       RELEASE:
-        description: 'Build target'
+        description: 'The build target. Set to "stable" by default.'
         required: true
         default: 'stable'
         type: choice
@@ -36,7 +36,7 @@ on:
           - 'test'
           - 'stable'
       VARIANT:
-        description: 'Variant type'
+        description: 'If you wanna build other variants like vanilla, core or gapps.'
         required: false
         default: 'CORE'
         type: choice
@@ -127,7 +127,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add $COUNTER_FILE
-          git commit -m "Update workflow run count for device ${{ inputs.CODENAME }} - $CURRENT_DATE"
+          git commit -m "Update workflow run count for device ${{ inputs.CODENAME }}"
           git push
         if: steps.check_limit.outcome == 'success'
 
@@ -188,5 +188,5 @@ jobs:
         run: echo "Build completed for device: ${{ inputs.CODENAME }}"
 
       - name: Post-Cleanup
-        if: ${{ always() }}
+        if: always()
         run: bash clean.sh
